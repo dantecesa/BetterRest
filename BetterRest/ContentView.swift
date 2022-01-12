@@ -13,10 +13,6 @@ struct ContentView: View {
     @State private var sleepAmount: Double = 8.0
     @State private var coffeeAmount: Int = 1
     
-    @State private var alertTitle: String = ""
-    @State private var alertText: String = ""
-    @State private var showAlert: Bool = false
-
     static var defaultWakeTime: Date {
         var components = DateComponents()
         components.hour = 6
@@ -45,24 +41,16 @@ struct ContentView: View {
                     Text("Tell us about your coffee intake")
                 }
                 
-                /*Section {
+                Section {
                     VStack {
                         Text("You should go to bed at…").padding(5)
                         Text(calculateBedTime()).font(.largeTitle).frame(maxWidth: .infinity, alignment: .center)
                     }
                 } header: {
                     Text("Recommendation")
-                }*/
+                }
             }
             .navigationTitle("BetterRest")
-            .toolbar {
-                Button("Calculate", action: calculateBedTime)
-            }
-            .alert(alertTitle, isPresented: $showAlert) {
-                Button("OK") { }
-            } message: {
-                Text(alertText)
-            }
         }
     }
     
@@ -86,8 +74,8 @@ struct ContentView: View {
         return output
     }
     
-    func calculateBedTime() {//} -> String {
-        //var output: String = ""
+    func calculateBedTime() -> String {
+        var output: String = ""
         
         do {
             let config = MLModelConfiguration()
@@ -101,16 +89,12 @@ struct ContentView: View {
             
             let sleepTime = wakeUp - prediction.actualSleep
             
-            alertTitle = "Your ideal sleep time is…"
-            alertText = sleepTime.formatted(date: .omitted, time: .shortened)
-            //output = sleepTime.formatted(date: .omitted, time: .shortened)
+            output = sleepTime.formatted(date: .omitted, time: .shortened)
         } catch {
-            alertTitle = "Something went wrong"
-            alertText = "There was an error when calculating sleep time."
+            output = "There was an error when calculating sleep time."
         }
         
-        showAlert = true
-        //return output
+        return output
     }
 }
 
