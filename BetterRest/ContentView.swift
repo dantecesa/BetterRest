@@ -24,7 +24,7 @@ struct ContentView: View {
         NavigationView {
             Form {
                 Section {
-                    DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
+                    DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute).frame(maxWidth: .infinity, alignment: .center)
                         .labelsHidden()
                         .datePickerStyle(.wheel)
                 } header: {
