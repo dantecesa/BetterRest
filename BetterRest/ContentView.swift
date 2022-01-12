@@ -25,7 +25,8 @@ struct ContentView: View {
             Form {
                 Section {
                     DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
-                        .labelsHidden().datePickerStyle(.wheel)
+                        .labelsHidden()
+                        .datePickerStyle(.wheel)
                 } header: {
                     Text("What time do you have to wake up?")
                 }
@@ -36,7 +37,7 @@ struct ContentView: View {
                 }
                 
                 Section {
-                    Stepper(coffeeAmount == 1 ? "☕️ 1 cup" :  "☕️ \(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
+                    Stepper(coffeePrinter(), value: $coffeeAmount, in: 0...20)
                 } header: {
                     Text("Tell us about your coffee intake")
                 }
@@ -44,13 +45,26 @@ struct ContentView: View {
                 Section {
                     VStack {
                         Text("You should go to bed at…").padding(5)
-                        Text(calculateBedTime()).font(.largeTitle).frame(maxWidth: .infinity, alignment: .center)
+                        Text(calculateBedTime())
+                            .font(.largeTitle)
+                            .frame(maxWidth: .infinity, alignment: .center)
                     }
                 } header: {
                     Text("Recommendation")
                 }
             }
             .navigationTitle("BetterRest")
+        }
+    }
+    
+    func coffeePrinter() -> String {
+        switch coffeeAmount {
+        case 0:
+            return "None"
+        case 1:
+            return "☕️ 1 cup"
+        default:
+            return "☕️ \(coffeeAmount) cups"
         }
     }
     
@@ -88,7 +102,7 @@ struct ContentView: View {
             let prediction = try model.prediction(wake: Double(hourInSeconds + minutesInSeconds), estimatedSleep: sleepAmount, coffee: Double(coffeeAmount))
             
             let sleepTime = wakeUp - prediction.actualSleep
-            
+        
             output = sleepTime.formatted(date: .omitted, time: .shortened)
         } catch {
             output = "There was an error when calculating sleep time."
