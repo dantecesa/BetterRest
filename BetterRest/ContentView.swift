@@ -54,7 +54,7 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("BetterRest")
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
     
     func coffeePrinter() -> String {
